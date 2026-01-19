@@ -25,8 +25,8 @@ interface NewsDAO {
     fun getAllArticlesByTopics(topics: List<String>): Flow<List<ArticleEntity>>
 
     @Insert(onConflict = IGNORE)
-    suspend fun addArticles(list: List<ArticleEntity>)
+    suspend fun addArticles(articles: List<ArticleEntity>)
 
     @Query("DELETE FROM articles WHERE topic IN (:topics)")
-    suspend fun deleteArticlesByTopics(list: List<String>)
+    suspend fun deleteArticlesByTopics(topics: List<String>)
 }
