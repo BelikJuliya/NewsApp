@@ -74,4 +74,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // Dependency on a local domain module
+    implementation(project(":data"))
+    implementation(project(":domain"))
 }
