@@ -42,7 +42,7 @@ class DataModule {
 
         @Provides
         @Singleton
-        fun providesBaseUrl(): String = "https://api.apilayer.com/exchangerates_data/"
+        fun providesBaseUrl(): String = "https://newsapi.org/v2/"
 
         @Provides
         @Singleton
@@ -59,3 +59,5 @@ class DataModule {
             .build()
     }
 }
+
+// 2c10d3c4175a4d8db13becb8873ba830
