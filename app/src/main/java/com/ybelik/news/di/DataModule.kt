@@ -2,6 +2,7 @@ package com.ybelik.news.di
 
 import android.content.Context
 import androidx.room.Room
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.ybelik.data.local.NewsDataBase
 import com.ybelik.data.local.entity.NewsDAO
 import dagger.Module
@@ -9,6 +10,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -35,5 +39,23 @@ class DataModule {
         ): NewsDAO {
             return dataBase.newsDao()
         }
+
+        @Provides
+        @Singleton
+        fun providesBaseUrl(): String = "https://api.apilayer.com/exchangerates_data/"
+
+        @Provides
+        @Singleton
+        fun provideOkHttpClient(@ApplicationContext appContext: Context): OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(ChuckerInterceptor(appContext))
+            .build()
+
+        @Provides
+        @Singleton
+        fun provideRetrofit(baseUrl: String, client: OkHttpClient): Retrofit = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .baseUrl(baseUrl)
+            .build()
     }
 }

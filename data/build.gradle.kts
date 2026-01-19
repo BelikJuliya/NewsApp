@@ -45,4 +45,8 @@ dependencies {
 
     implementation(project(":domain"))
 
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
 }

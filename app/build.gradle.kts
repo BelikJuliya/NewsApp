@@ -75,7 +75,14 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    // Chucker
+    debugImplementation(libs.library)
+
     // Dependency on a local domain module
     implementation(project(":data"))
     implementation(project(":domain"))
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }
