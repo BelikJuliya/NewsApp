@@ -12,6 +12,11 @@ android {
     namespace = "com.ybelik.news"
     compileSdk = 36
 
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.ybelik.news"
         minSdk = 24
@@ -21,11 +26,15 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        val apiKey: String = rootProject.findProperty("API_KEY") as String?
+            ?: error("API_KEY not found in local.properties")
+
         buildConfigField(
             "String",
             "API_KEY",
-            "\"${project.findProperty("API_KEY")}\""
+            "\"$apiKey\""
         )
+        println(">>> API_KEY from Gradle = ${rootProject.findProperty("API_KEY")}")
     }
 
     buildTypes {
@@ -40,10 +49,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
-        android.buildFeatures.buildConfig = true
     }
 }
 

@@ -34,10 +34,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
@@ -50,12 +53,14 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.ybelik.domain.model.Article
 import com.ybelik.news.DateFormatter
+import com.ybelik.news.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscriptionsScreen(
     modifier: Modifier = Modifier,
-    viewModel: SubscriptionsViewModel = hiltViewModel()
+    viewModel: SubscriptionsViewModel = hiltViewModel(),
+    onNavigateToSettings: () -> Unit
 ) {
     val state = viewModel.state.collectAsState()
     Scaffold(
@@ -69,7 +74,7 @@ fun SubscriptionsScreen(
                     viewModel.handleIntent(SubscriptionsIntent.ClearArticles)
                 },
                 onSettingsClick = {
-                    // TODO navigate to settings screen //
+                    onNavigateToSettings()
                 }
             )
         }
@@ -92,14 +97,14 @@ fun SubscriptionsScreen(
                     onButtonClick = {
                         viewModel.handleIntent(SubscriptionsIntent.ClickSubscribe)
                     },
-                    text = "Add subscription",
+                    text = stringResource(R.string.add_subscription),
                     isEnabled = state.value.subscribeBtnEnabled
                 )
             }
             item {
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = "Subscriptions (${state.value.subscriptions.size})",
+                    text = stringResource(R.string.subscriptions, state.value.subscriptions.size),
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 18.sp
                 )
@@ -109,6 +114,9 @@ fun SubscriptionsScreen(
                     subscriptions = state.value.subscriptions,
                     onChipClick = { topic ->
                         viewModel.handleIntent(SubscriptionsIntent.ToggleTopicSelection(topic = topic))
+                    },
+                    onDeleteChipClick = { topic ->
+                        viewModel.handleIntent(SubscriptionsIntent.RemoveSubscription(topic = topic))
                     }
                 )
             }
@@ -122,7 +130,7 @@ fun SubscriptionsScreen(
             item {
                 Text(
                     modifier = Modifier.padding(16.dp),
-                    text = "Articles (${state.value.articles.size})",
+                    text = stringResource(R.string.articles, state.value.articles.size),
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 20.sp
                 )
@@ -154,14 +162,16 @@ fun SubscriptionsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsAppBar(
+    modifier: Modifier = Modifier,
     onRefreshClick: () -> Unit,
     onClearClick: () -> Unit,
     onSettingsClick: () -> Unit
 ) {
     TopAppBar(
+        modifier = modifier,
         title = {
             Text(
-                text = "My news",
+                text = stringResource(R.string.subscriptions_title),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -170,23 +180,25 @@ fun NewsAppBar(
         actions = {
             Icon(
                 modifier = Modifier
+                    .clip(CircleShape)
                     .padding(16.dp)
                     .clickable {
                         onRefreshClick()
                     },
                 imageVector = Icons.Default.Refresh,
                 tint = MaterialTheme.colorScheme.onSurface,
-                contentDescription = "Refresh icon"
+                contentDescription = stringResource(R.string.refresh_icon)
             )
             Icon(
                 modifier = Modifier
+                    .clip(CircleShape)
                     .padding(16.dp)
                     .clickable {
                         onClearClick()
                     },
                 imageVector = Icons.Default.Clear,
                 tint = MaterialTheme.colorScheme.onSurface,
-                contentDescription = "Clear icon"
+                contentDescription = stringResource(R.string.clear_icon)
             )
             Icon(
                 modifier = Modifier
@@ -196,7 +208,7 @@ fun NewsAppBar(
                     },
                 imageVector = Icons.Default.Settings,
                 tint = MaterialTheme.colorScheme.onSurface,
-                contentDescription = "Clear icon"
+                contentDescription = stringResource(R.string.settings_icon)
             )
         }
     )
@@ -229,21 +241,16 @@ fun InputTopic(
     onTextChanged: (String) -> Unit,
     text: String
 ) {
-    TextField(
+    OutlinedTextField(
         modifier = modifier
-            .fillMaxWidth(),
-//            .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         value = text,
         onValueChange = onTextChanged,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        ),
+        singleLine = true,
         placeholder = {
             Text(
-                text = "What interests you?",
+                text = stringResource(R.string.what_interests_you),
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
             )
@@ -283,7 +290,7 @@ fun ActionButton(
     ) {
         Icon(
             imageVector = Icons.Default.Add,
-            contentDescription = "Add subscription btn",
+            contentDescription = stringResource(R.string.add_subscription_btn),
             tint = MaterialTheme.colorScheme.onSurface,
         )
         Text(
@@ -301,6 +308,9 @@ fun ChipsPreview() {
         subscriptions = mapOf("Kotlin" to true, "Android" to false),
         onChipClick = { _ ->
 
+        },
+        onDeleteChipClick = {
+
         }
     )
 }
@@ -309,7 +319,8 @@ fun ChipsPreview() {
 fun FilterChips(
     modifier: Modifier = Modifier,
     subscriptions: Map<String, Boolean>,
-    onChipClick: (String) -> Unit
+    onChipClick: (String) -> Unit,
+    onDeleteChipClick: (String) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -328,9 +339,13 @@ fun FilterChips(
                 },
                 trailingIcon = {
                     Icon(
+                        modifier = Modifier
+                            .size(FilterChipDefaults.IconSize)
+                            .clickable {
+                                onDeleteChipClick(entry.key)
+                            },
                         imageVector = Icons.Default.Clear,
-                        contentDescription = "Clear chip",
-                        modifier = Modifier.size(FilterChipDefaults.IconSize),
+                        contentDescription = stringResource(R.string.clear_chip)
                     )
                 }
             )
@@ -374,7 +389,7 @@ fun Article(
                 .fillMaxWidth()
                 .heightIn(max = 200.dp),
             model = article.imageUrl,
-            contentDescription = "Article image",
+            contentDescription = stringResource(R.string.article_image),
             contentScale = ContentScale.FillWidth
         )
         Text(
@@ -422,7 +437,8 @@ fun Article(
                 .fillMaxWidth(),
         ) {
             Button(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(end = 8.dp)
                     .weight(1f),
                 onClick = {
@@ -431,7 +447,7 @@ fun Article(
             ) {
                 Icon(
                     imageVector = Icons.Default.ExitToApp,
-                    contentDescription = "Read the article",
+                    contentDescription = stringResource(R.string.read_the_article),
                 )
                 Text(
                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -439,7 +455,8 @@ fun Article(
                 )
             }
             Button(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 8.dp)
                     .weight(1f),
                 onClick = {
@@ -447,12 +464,12 @@ fun Article(
                 }
             ) {
                 Icon(
-                    imageVector = Icons.Default.ExitToApp,
-                    contentDescription = "Read the article",
+                    imageVector = Icons.Default.Share,
+                    contentDescription = stringResource(R.string.share_the_article),
                 )
                 Text(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    text = "Read"
+                    text = stringResource(R.string.share)
                 )
             }
         }

@@ -2,4 +2,18 @@
     <string name="app_name">NewsApp</string>
     <string name="just_now">Just now</string>
     <string name="hours_ago">%1$d hours ago</string>
+    <string name="subscriptions_title">My news</string>
+    <string name="what_interests_you">What interests you?</string>
+    <string name="subscriptions">Subscriptions (%1$d)</string>
+    <string name="add_subscription">Add subscription</string>
+    <string name="articles">Articles (%1$d)</string>
+    <string name="refresh_icon">Refresh icon</string>
+    <string name="clear_icon">Clear icon</string>
+    <string name="settings_icon">Settings icon</string>
+    <string name="add_subscription_btn">Add subscription btn</string>
+    <string name="clear_chip">Clear chip</string>
+    <string name="article_image">Article image</string>
+    <string name="read_the_article">Read the article</string>
+    <string name="share_the_article">Share the article</string>
+    <string name="share">Share</string>
 </resources>
