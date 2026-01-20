@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NewsApp</string>
+    <string name="just_now">Just now</string>
+    <string name="hours_ago">%1$d hours ago</string>
 </resources>

@@ -74,7 +74,7 @@ interface DataModule {
         @Singleton
         fun provideOkHttpClient(@ApplicationContext appContext: Context) = OkHttpClient.Builder()
             .addInterceptor(ApiKeyInterceptor(BuildConfig.API_KEY))
-            .addInterceptor(ChuckerInterceptor(appContext))
+//            .addInterceptor(ChuckerInterceptor(appContext))
             .build()
 
         @Provides
