@@ -379,6 +379,7 @@ fun Article(
 ) {
     Column(
         modifier = modifier
+            .padding(horizontal = 16.dp)
             .clip(
                 shape = RoundedCornerShape(16.dp)
             )
@@ -460,7 +461,7 @@ fun Article(
                     .padding(start = 8.dp)
                     .weight(1f),
                 onClick = {
-                    onReadClick()
+                    onShareClick()
                 }
             ) {
                 Icon(

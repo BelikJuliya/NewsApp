@@ -69,13 +69,13 @@ interface DataModule {
         @Provides
         @Singleton
         fun providesBaseUrl(): String = "https://newsapi.org/"
-
+// CAT
         @Provides
         @Singleton
         fun provideOkHttpClient(@ApplicationContext appContext: Context) = OkHttpClient.Builder()
             .addInterceptor(ApiKeyInterceptor(BuildConfig.API_KEY))
             .addInterceptor(ChuckerInterceptor(appContext))
-            .build()
+            .build() ///
 
         @Provides
         @Singleton

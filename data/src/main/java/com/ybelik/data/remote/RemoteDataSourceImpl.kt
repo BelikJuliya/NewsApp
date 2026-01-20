@@ -9,11 +9,17 @@ class RemoteDataSourceImpl @Inject constructor(
     private val apiService: NewsApiService
 ) : RemoteDataSource {
 
-    override suspend fun loadArticles(topic: String): List<ArticleResponse> {
+    val TAG = "NewsRepository"
+
+    override suspend fun loadArticles(topic: String): List<ArticleResponse> { //CAT
+        Log.d(TAG, "loadArticles: for topic = $topic")
         return try {
-             apiService.loadArticles(topic = topic)
+             val list = apiService.loadArticles(topic = topic).articles
+            Log.d(TAG, "loadArticles: $list")
+            list
         } catch (e: Exception) {
             if (e is CancellationException) {
+                Log.e("NewsRepository", "CancellationException")
                 throw e
             } else {
                 Log.e("NewsRepository", e.stackTraceToString())
