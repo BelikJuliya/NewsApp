@@ -16,4 +16,6 @@
     <string name="read_the_article">Read the article</string>
     <string name="share_the_article">Share the article</string>
     <string name="share">Share</string>
+    <string name="read">Read</string>
+    <string name="no_articles_for_selected_subscription">No articles for selected subscription</string>
 </resources>
