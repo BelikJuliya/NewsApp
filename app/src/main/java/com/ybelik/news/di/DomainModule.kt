@@ -1,12 +1,18 @@
 package com.ybelik.news.di
 
 import com.ybelik.domain.repoository.NewsRepository
-import com.ybelik.domain.usecase.AddSubscriptionUseCase
-import com.ybelik.domain.usecase.ClearAllArticlesUseCase
-import com.ybelik.domain.usecase.GetAllSubscriptionUseCase
-import com.ybelik.domain.usecase.GetArticlesByTopicUseCase
-import com.ybelik.domain.usecase.RemoveSubscriptionUseCase
-import com.ybelik.domain.usecase.UpdateSubscribedArticlesUseCase
+import com.ybelik.domain.repoository.SettingsRepository
+import com.ybelik.domain.usecase.settings.GetSettingsUseCase
+import com.ybelik.domain.usecase.settings.UpdateIntervalUseCase
+import com.ybelik.domain.usecase.settings.UpdateLanguageUseCase
+import com.ybelik.domain.usecase.settings.UpdateNotificationsUseCase
+import com.ybelik.domain.usecase.settings.UpdateWifiOnlyUseCase
+import com.ybelik.domain.usecase.subscriptions.AddSubscriptionUseCase
+import com.ybelik.domain.usecase.subscriptions.ClearAllArticlesUseCase
+import com.ybelik.domain.usecase.subscriptions.GetAllSubscriptionUseCase
+import com.ybelik.domain.usecase.subscriptions.GetArticlesByTopicUseCase
+import com.ybelik.domain.usecase.subscriptions.RemoveSubscriptionUseCase
+import com.ybelik.domain.usecase.subscriptions.UpdateSubscribedArticlesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +22,7 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 class DomainModule {
 
+    // Subscriptions
     @Provides
     fun provideAddSubscriptionUseCase(repository: NewsRepository): AddSubscriptionUseCase {
         return AddSubscriptionUseCase(repository)
@@ -44,5 +51,32 @@ class DomainModule {
     @Provides
     fun provideUpdateSubscribedArticlesUseCase(repository: NewsRepository): UpdateSubscribedArticlesUseCase {
         return UpdateSubscribedArticlesUseCase(repository)
+    }
+
+
+    // Settings
+    @Provides
+    fun provideGetSettingsUseCase(repository: SettingsRepository): GetSettingsUseCase {
+        return GetSettingsUseCase(repository)
+    }
+
+    @Provides
+    fun provideUpdateLanguageUseCase(repository: SettingsRepository): UpdateLanguageUseCase {
+        return UpdateLanguageUseCase(repository)
+    }
+
+    @Provides
+    fun provideUpdateNotificationsUseCase(repository: SettingsRepository): UpdateNotificationsUseCase {
+        return UpdateNotificationsUseCase(repository)
+    }
+
+    @Provides
+    fun provideUpdateWifiOnlyUseCase(repository: SettingsRepository): UpdateWifiOnlyUseCase {
+        return UpdateWifiOnlyUseCase(repository)
+    }
+
+    @Provides
+    fun provideUpdateIntervalUseCase(repository: SettingsRepository): UpdateIntervalUseCase {
+        return UpdateIntervalUseCase(repository)
     }
 }

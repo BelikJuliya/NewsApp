@@ -2,12 +2,12 @@ package com.ybelik.news.screen.subscriiption
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ybelik.domain.usecase.AddSubscriptionUseCase
-import com.ybelik.domain.usecase.ClearAllArticlesUseCase
-import com.ybelik.domain.usecase.GetAllSubscriptionUseCase
-import com.ybelik.domain.usecase.GetArticlesByTopicUseCase
-import com.ybelik.domain.usecase.RemoveSubscriptionUseCase
-import com.ybelik.domain.usecase.UpdateSubscribedArticlesUseCase
+import com.ybelik.domain.usecase.subscriptions.AddSubscriptionUseCase
+import com.ybelik.domain.usecase.subscriptions.ClearAllArticlesUseCase
+import com.ybelik.domain.usecase.subscriptions.GetAllSubscriptionUseCase
+import com.ybelik.domain.usecase.subscriptions.GetArticlesByTopicUseCase
+import com.ybelik.domain.usecase.subscriptions.RemoveSubscriptionUseCase
+import com.ybelik.domain.usecase.subscriptions.UpdateSubscribedArticlesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

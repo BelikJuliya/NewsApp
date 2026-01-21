@@ -1,4 +1,4 @@
-package com.ybelik.domain.usecase
+package com.ybelik.domain.usecase.subscriptions
 
 import com.ybelik.domain.model.Article
 import com.ybelik.domain.repoository.NewsRepository
