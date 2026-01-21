@@ -1,8 +1,8 @@
 package com.ybelik.news.screen.subscriiption
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,8 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -44,6 +42,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -51,6 +50,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.ybelik.domain.model.Article
@@ -148,12 +148,6 @@ fun SubscriptionsScreen(
                     key = { it.url }
                 ) {
                     ArticleCard(
-                        onReadClick = {
-                            // TODO navigate to webview
-                        },
-                        onShareClick = {
-                            // TODO share
-                        },
                         article = it
                     )
                 }
@@ -366,8 +360,6 @@ fun FilterChips(
 @Preview
 fun ArticlePreview() {
     ArticleCard(
-        onReadClick = {},
-        onShareClick = {},
         article = Article(
             title = "Title example",
             description = "Мальдивы – тропическое государство в Индийском океане, расположенное на 26 кольцевидных атоллах, которые состоят из более чем тысячи коралловых островов. Оно славится своими пляжами, голубыми лагунами и огромными рифами. В столице страны Мале стоит посетить оживленный рыбный рынок, рестораны и магазины на главной дороге Меджеде-Магу, а также мечеть Хукуру-Миский (Пятничная мечеть), фундамент и стены которой украшены резьбой по белому кораллу",
@@ -382,8 +374,6 @@ fun ArticlePreview() {
 @Composable
 fun ArticleCard(
     modifier: Modifier = Modifier,
-    onReadClick: () -> Unit,
-    onShareClick: () -> Unit,
     article: Article
 ) {
     Card(
@@ -450,13 +440,15 @@ fun ArticleCard(
                 .padding(16.dp)
                 .fillMaxWidth(),
         ) {
+            val context = LocalContext.current
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 8.dp)
                     .weight(1f),
                 onClick = {
-                    onReadClick()
+                    val intent = Intent(Intent.ACTION_VIEW, article.url.toUri())
+                    context.startActivity(intent)
                 }
             ) {
                 Icon(
@@ -474,7 +466,11 @@ fun ArticleCard(
                     .padding(start = 8.dp)
                     .weight(1f),
                 onClick = {
-                    onShareClick()
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, "${article.title}\n\n + ${article.description}")
+                    }
+                    context.startActivity(intent)
                 }
             ) {
                 Icon(
