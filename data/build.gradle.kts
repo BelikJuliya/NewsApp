@@ -51,10 +51,14 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    // Serialization
     implementation(libs.kotlinx.serialization.json)
 
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.work)
 
+    // Work manager
+    implementation(libs.androidx.work.runtime.ktx)
 }

@@ -2,6 +2,7 @@ package com.ybelik.news.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.ybelik.data.NewsRepositoryImpl
@@ -69,7 +70,7 @@ interface DataModule {
         @Provides
         @Singleton
         fun providesBaseUrl(): String = "https://newsapi.org/"
-// CAT
+
         @Provides
         @Singleton
         fun provideOkHttpClient(@ApplicationContext appContext: Context) = OkHttpClient.Builder()
@@ -110,5 +111,11 @@ interface DataModule {
         @Provides
         @Singleton
         fun provideApiService(retrofit: Retrofit) = retrofit.create<NewsApiService>()
+
+        @Provides
+        @Singleton
+        fun provideWorkManager(
+            @ApplicationContext context: Context
+        ) = WorkManager.getInstance(context)
     }
 }
