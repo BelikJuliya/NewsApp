@@ -6,6 +6,7 @@ import androidx.work.WorkManager
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.ybelik.data.NewsRepositoryImpl
+import com.ybelik.data.SettingsRepositoryImpl
 import com.ybelik.data.local.LocalDataSource
 import com.ybelik.data.local.LocalDataSourceImpl
 import com.ybelik.data.local.NewsDataBase
@@ -15,6 +16,7 @@ import com.ybelik.data.remote.NewsApiService
 import com.ybelik.data.remote.RemoteDataSource
 import com.ybelik.data.remote.RemoteDataSourceImpl
 import com.ybelik.domain.repoository.NewsRepository
+import com.ybelik.domain.repoository.SettingsRepository
 import com.ybelik.news.BuildConfig
 import dagger.Binds
 import dagger.Module
@@ -36,7 +38,7 @@ interface DataModule {
 
     @Binds
     @Singleton
-    fun bindRepository(impl: NewsRepositoryImpl): NewsRepository
+    fun bindNewsRepository(impl: NewsRepositoryImpl): NewsRepository
 
     @Binds
     @Singleton
@@ -45,6 +47,10 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindRemoteDataSource(impl: RemoteDataSourceImpl): RemoteDataSource
+
+    @Binds
+    @Singleton
+    fun bindSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
 
     companion object {
 
