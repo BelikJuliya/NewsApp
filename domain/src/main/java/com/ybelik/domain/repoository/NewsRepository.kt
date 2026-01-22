@@ -10,11 +10,11 @@ interface NewsRepository {
 
     suspend fun addSubscription(topic: String)
 
-    suspend fun updateArticlesForTopic(topic: String)
+    suspend fun updateArticlesForTopic(topic: String): Boolean
 
     suspend fun removeSubscription(topic: String)
 
-    suspend fun updateArticlesForAllSubscription()
+    suspend fun updateArticlesForAllSubscription(): List<String>
 
     fun getArticlesByTopics(topics: List<String>): Flow<List<Article>>
 

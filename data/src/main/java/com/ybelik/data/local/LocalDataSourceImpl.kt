@@ -18,8 +18,8 @@ class LocalDataSourceImpl @Inject constructor(
         newsDAO.addSubscription(SubscriptionEntity(topic = topic))
     }
 
-    override suspend fun addArticles(articles: List<ArticleEntity>) {
-        newsDAO.addArticles(articles = articles)
+    override suspend fun addArticles(articles: List<ArticleEntity>): List<Long> {
+        return newsDAO.addArticles(articles = articles)
     }
 
     override suspend fun removeSubscription(topic: String) {

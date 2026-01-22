@@ -9,14 +9,15 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.ybelik.data.R
+import com.ybelik.domain.NotificationHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlin.jvm.javaClass
 
- class NotificationHelper @Inject constructor(
+class NotificationHelperImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationManager: NotificationManager
-) {
+) : NotificationHelper {
 
     init {
         createNotification()
@@ -31,7 +32,7 @@ import kotlin.jvm.javaClass
         notificationManager.createNotificationChannel(channel)
     }
 
-    fun showNewArticlesNotification(topics: List<String>) {
+    override fun showNewArticlesNotification(topics: List<String>) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
@@ -56,6 +57,7 @@ import kotlin.jvm.javaClass
     }
 
     companion object {
+
         const val CHANNEL_ID = "new_articles"
         const val NOTIFICATION_ID = 1
         const val PENDING_INTENT_REQUEST_CODE = 2

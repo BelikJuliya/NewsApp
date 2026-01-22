@@ -5,7 +5,7 @@ import com.ybelik.domain.repoository.NewsRepository
 class UpdateSubscribedArticlesUseCase(
     private val repository: NewsRepository
 ) {
-    suspend operator fun invoke() {
-        repository.updateArticlesForAllSubscription()
+    suspend operator fun invoke(): List<String> {
+        return repository.updateArticlesForAllSubscription()
     }
 }

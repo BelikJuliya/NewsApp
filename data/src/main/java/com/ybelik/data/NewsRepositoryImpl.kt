@@ -36,26 +36,32 @@ class NewsRepositoryImpl @Inject constructor(
         return localDataSource.addSubscription(topic = topic)
     }
 
-    override suspend fun updateArticlesForTopic(topic: String) {
+    override suspend fun updateArticlesForTopic(topic: String): Boolean {
         val articles = remoteDataSource.loadArticles(topic = topic).map { articleResponse ->
             ArticleMapper.toEntity(remoteModel = articleResponse, topic = topic)
         }
-        localDataSource.addArticles(articles = articles)
+        val addedArticlesIds = localDataSource.addArticles(articles = articles)
+        return addedArticlesIds.any { it != -1L}
     }
 
     override suspend fun removeSubscription(topic: String) {
         localDataSource.removeSubscription(topic = topic)
     }
 
-    override suspend fun updateArticlesForAllSubscription() {
+    override suspend fun updateArticlesForAllSubscription(): List<String> {
+        val updatedTopics = mutableListOf<String>()
         val subscriptions = localDataSource.getAllSubscriptions().first()
         coroutineScope {
             subscriptions.forEach { subscription ->
                 launch {
-                    updateArticlesForTopic(topic = subscription.topic)
+                    val isUpdated = updateArticlesForTopic(topic = subscription.topic)
+                    if (isUpdated) {
+                        updatedTopics.add(subscription.topic)
+                    }
                 }
             }
         }
+        return updatedTopics
     }
 
     override fun getArticlesByTopics(topics: List<String>): Flow<List<Article>> {

@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.ybelik.domain.NotificationHelper
 import com.ybelik.domain.usecase.subscriptions.UpdateSubscribedArticlesUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -22,9 +23,9 @@ class RefreshDataWorker @AssistedInject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         Log.d("RefreshDataWorker", "doWork: Start")
-        updateSubscribedArticlesUseCase()
+        val updatedTopics = updateSubscribedArticlesUseCase()
         Log.d("RefreshDataWorker", "doWork: Finish")
-        notificationsHelper.showNewArticlesNotification(emptyList())
+        notificationsHelper.showNewArticlesNotification(updatedTopics)
         return Result.success()
     }
 }

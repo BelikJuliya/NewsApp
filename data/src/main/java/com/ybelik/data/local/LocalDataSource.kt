@@ -10,7 +10,7 @@ interface LocalDataSource {
 
     suspend fun addSubscription(topic: String)
 
-    suspend fun addArticles(articles: List<ArticleEntity>)
+    suspend fun addArticles(articles: List<ArticleEntity>): List<Long>
 
     suspend fun removeSubscription(topic: String)
 
