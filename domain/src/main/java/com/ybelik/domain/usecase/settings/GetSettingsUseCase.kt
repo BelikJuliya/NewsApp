@@ -12,7 +12,7 @@ class GetSettingsUseCase(
     private val repository: SettingsRepository
 ) {
 
-    operator fun invoke(topic: String): Flow<Settings> {
+    operator fun invoke(): Flow<Settings> {
         return repository.getSettings()
     }
 }

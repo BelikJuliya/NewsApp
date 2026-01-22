@@ -10,6 +10,7 @@ import com.ybelik.data.local.LocalDataSource
 import com.ybelik.data.mapper.ArticleMapper
 import com.ybelik.data.remote.RemoteDataSource
 import com.ybelik.domain.model.Article
+import com.ybelik.domain.model.Language
 import com.ybelik.domain.model.RefreshConfig
 import com.ybelik.domain.repoository.NewsRepository
 import kotlinx.coroutines.coroutineScope
@@ -36,25 +37,31 @@ class NewsRepositoryImpl @Inject constructor(
         return localDataSource.addSubscription(topic = topic)
     }
 
-    override suspend fun updateArticlesForTopic(topic: String): Boolean {
-        val articles = remoteDataSource.loadArticles(topic = topic).map { articleResponse ->
-            ArticleMapper.toEntity(remoteModel = articleResponse, topic = topic)
+    override suspend fun updateArticlesForTopic(topic: String, language: Language): Boolean {
+        val articles = remoteDataSource.loadArticles(
+            topic = topic,
+            language = language
+        ).map { articleResponse ->
+            ArticleMapper.toEntity(
+                remoteModel = articleResponse,
+                topic = topic
+            )
         }
         val addedArticlesIds = localDataSource.addArticles(articles = articles)
-        return addedArticlesIds.any { it != -1L}
+        return addedArticlesIds.any { it != -1L }
     }
 
     override suspend fun removeSubscription(topic: String) {
         localDataSource.removeSubscription(topic = topic)
     }
 
-    override suspend fun updateArticlesForAllSubscription(): List<String> {
+    override suspend fun updateArticlesForAllSubscription(language: Language): List<String> {
         val updatedTopics = mutableListOf<String>()
         val subscriptions = localDataSource.getAllSubscriptions().first()
         coroutineScope {
             subscriptions.forEach { subscription ->
                 launch {
-                    val isUpdated = updateArticlesForTopic(topic = subscription.topic)
+                    val isUpdated = updateArticlesForTopic(topic = subscription.topic, language = language)
                     if (isUpdated) {
                         updatedTopics.add(subscription.topic)
                     }
