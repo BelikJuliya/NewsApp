@@ -25,8 +25,14 @@ class DomainModule {
 
     // Subscriptions
     @Provides
-    fun provideAddSubscriptionUseCase(repository: NewsRepository): AddSubscriptionUseCase {
-        return AddSubscriptionUseCase(repository)
+    fun provideAddSubscriptionUseCase(
+        newsRepository: NewsRepository,
+        settingsRepository: SettingsRepository
+    ): AddSubscriptionUseCase {
+        return AddSubscriptionUseCase(
+            newsRepository = newsRepository,
+            settingsRepository = settingsRepository
+        )
     }
 
     @Provides
@@ -50,8 +56,14 @@ class DomainModule {
     }
 
     @Provides
-    fun provideUpdateSubscribedArticlesUseCase(repository: NewsRepository): UpdateSubscribedArticlesUseCase {
-        return UpdateSubscribedArticlesUseCase(repository)
+    fun provideUpdateSubscribedArticlesUseCase(
+        newsRepository: NewsRepository,
+        settingsRepository: SettingsRepository
+    ): UpdateSubscribedArticlesUseCase {
+        return UpdateSubscribedArticlesUseCase(
+            newsRepository = newsRepository,
+            settingsRepository = settingsRepository
+        )
     }
 
     // Settings
