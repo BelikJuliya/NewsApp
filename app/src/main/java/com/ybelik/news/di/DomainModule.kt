@@ -12,6 +12,7 @@ import com.ybelik.domain.usecase.subscriptions.ClearAllArticlesUseCase
 import com.ybelik.domain.usecase.subscriptions.GetAllSubscriptionUseCase
 import com.ybelik.domain.usecase.subscriptions.GetArticlesByTopicUseCase
 import com.ybelik.domain.usecase.subscriptions.RemoveSubscriptionUseCase
+import com.ybelik.domain.usecase.subscriptions.StartRefreshDataUseCase
 import com.ybelik.domain.usecase.subscriptions.UpdateSubscribedArticlesUseCase
 import dagger.Module
 import dagger.Provides
@@ -53,7 +54,6 @@ class DomainModule {
         return UpdateSubscribedArticlesUseCase(repository)
     }
 
-
     // Settings
     @Provides
     fun provideGetSettingsUseCase(repository: SettingsRepository): GetSettingsUseCase {
@@ -78,5 +78,16 @@ class DomainModule {
     @Provides
     fun provideUpdateIntervalUseCase(repository: SettingsRepository): UpdateIntervalUseCase {
         return UpdateIntervalUseCase(repository)
+    }
+
+    @Provides
+    fun provideStartRefreshDataUseCase(
+        newsRepository: NewsRepository,
+        settingsRepository: SettingsRepository
+    ): StartRefreshDataUseCase {
+        return StartRefreshDataUseCase(
+            newsRepository = newsRepository,
+            settingsRepository = settingsRepository
+        )
     }
 }

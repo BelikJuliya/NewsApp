@@ -9,8 +9,10 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.ybelik.data.mapper.toInterval
+import com.ybelik.data.mapper.toRefreshConfig
 import com.ybelik.domain.model.Interval
 import com.ybelik.domain.model.Language
+import com.ybelik.domain.model.RefreshConfig
 import com.ybelik.domain.model.Settings
 import com.ybelik.domain.repoository.SettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -42,6 +44,10 @@ class SettingsRepositoryImpl @Inject constructor(
                 isWifiOnly = wifiOnly
             )
         }
+    }
+
+    override fun getRefreshConfig(): Flow<RefreshConfig> {
+        return getSettings().map { it.toRefreshConfig() }
     }
 
     override suspend fun updateLanguage(language: Language) {

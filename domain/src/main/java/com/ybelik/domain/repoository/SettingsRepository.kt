@@ -1,6 +1,7 @@
 package com.ybelik.domain.repoository
 
 import com.ybelik.domain.model.Language
+import com.ybelik.domain.model.RefreshConfig
 import com.ybelik.domain.model.Settings
 import kotlinx.coroutines.flow.Flow
 
@@ -15,4 +16,6 @@ interface SettingsRepository {
     suspend fun updateNotificationsEnabled(isEnabled: Boolean)
 
     suspend fun updateWifiOnly(isWifiOnly: Boolean)
+
+    fun getRefreshConfig(): Flow<RefreshConfig>
 }

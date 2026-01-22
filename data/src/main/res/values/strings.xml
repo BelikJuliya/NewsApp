@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="new_articles">New articles</string>
+    <string name="new_articles_title">New articles</string>
+    <string name="topics_updated">Topics updated (%1$d): \n %2$s</string>
+</resources>

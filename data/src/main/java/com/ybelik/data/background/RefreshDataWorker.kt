@@ -1,7 +1,9 @@
 package com.ybelik.data.background
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -13,13 +15,16 @@ import dagger.assisted.AssistedInject
 class RefreshDataWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val updateSubscribedArticlesUseCase: UpdateSubscribedArticlesUseCase
+    private val updateSubscribedArticlesUseCase: UpdateSubscribedArticlesUseCase,
+    private val notificationsHelper: NotificationHelper
 ) : CoroutineWorker(context, workerParams) {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         Log.d("RefreshDataWorker", "doWork: Start")
         updateSubscribedArticlesUseCase()
         Log.d("RefreshDataWorker", "doWork: Finish")
+        notificationsHelper.showNewArticlesNotification(emptyList())
         return Result.success()
     }
 }

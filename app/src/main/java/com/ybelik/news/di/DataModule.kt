@@ -1,6 +1,8 @@
 package com.ybelik.news.di
 
+import android.app.NotificationManager
 import android.content.Context
+import androidx.core.content.getSystemService
 import androidx.room.Room
 import androidx.work.WorkManager
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -123,5 +125,11 @@ interface DataModule {
         fun provideWorkManager(
             @ApplicationContext context: Context
         ) = WorkManager.getInstance(context)
+
+        @Provides
+        @Singleton
+        fun provideNotificationManager(
+            @ApplicationContext context: Context
+        ) = context.getSystemService<NotificationManager>()
     }
 }

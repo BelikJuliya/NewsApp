@@ -1,6 +1,8 @@
 package com.ybelik.data
 
+import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.ybelik.data.background.RefreshDataWorker
@@ -8,6 +10,7 @@ import com.ybelik.data.local.LocalDataSource
 import com.ybelik.data.mapper.ArticleMapper
 import com.ybelik.data.remote.RemoteDataSource
 import com.ybelik.domain.model.Article
+import com.ybelik.domain.model.RefreshConfig
 import com.ybelik.domain.repoository.NewsRepository
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -67,15 +70,27 @@ class NewsRepositoryImpl @Inject constructor(
         localDataSource.clearAllArticles(topics)
     }
 
-    private fun startBackgroundRefresh() {
+    override fun startBackgroundRefresh(refreshConfig: RefreshConfig) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(
+                if (refreshConfig.isWifiOnly) {
+                    NetworkType.UNMETERED
+                } else {
+                    NetworkType.CONNECTED
+                }
+            )
+            .setRequiresBatteryNotLow(true)
+            .build()
         val request = PeriodicWorkRequestBuilder<RefreshDataWorker>(
             repeatInterval = 15L,
             repeatIntervalTimeUnit = TimeUnit.MINUTES
-        ).build()
+        )
+            .setConstraints(constraints)
+            .build()
         workManager.enqueueUniquePeriodicWork(
             uniqueWorkName = "Refresh data",
             existingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
-            request = request
+            request = request,
         )
     }
 }
