@@ -72,6 +72,7 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             getSettingsUseCase().collect { settings ->
                 _state.update { previousState ->
+                    Log.d(TAG, "observeSettings: new settings collected $settings")
                     previousState.copy(settingsList = previousState.settingsList.map {
                         it.updateFrom(settings)
                     })
@@ -84,54 +85,26 @@ class SettingsViewModel @Inject constructor(
         when (intent) {
             is SettingsIntent.ChangeInterval -> {
                 viewModelScope.launch {
-                    _state.update { previousState ->
-                        updateIntervalUseCase(interval = intent.interval.toInterval())
-                        Log.d(TAG, "handleIntent: interval updated, post new state with interval ${intent.interval}")
-                        previousState.copy(
-                            settingsList = state.value.settingsList.map {
-                                if (it.name.key == intent.name.key) it.update(intent.interval) else it
-                            }
-                        )
-                    }
+                    Log.d(TAG, "handleIntent: interval updated, post new state with interval ${intent.interval}")
+                    updateIntervalUseCase(interval = intent.interval.toInterval())
                 }
             }
 
             is SettingsIntent.ChangeLanguage -> {
                 viewModelScope.launch {
-                    _state.update { previousState ->
-                        updateLanguageUseCase(language = intent.language.toLanguage())
-                        previousState.copy(
-                            settingsList = state.value.settingsList.map {
-                                if (it.name.key == intent.name.key) it.update(intent.language) else it
-                            }
-                        )
-                    }
+                    updateLanguageUseCase(language = intent.language.toLanguage())
                 }
             }
 
             is SettingsIntent.ToggleIsWifiOnly -> {
                 viewModelScope.launch {
-                    _state.update { previousState ->
-                        updateWifiOnlyUseCase(isWifiOnly = intent.isWifiOnly)
-                        previousState.copy(
-                            settingsList = state.value.settingsList.map {
-                                if (it.name.key == intent.name.key) it.update(intent.isWifiOnly) else it
-                            }
-                        )
-                    }
+                    updateWifiOnlyUseCase(isWifiOnly = intent.isWifiOnly)
                 }
             }
 
             is SettingsIntent.ToggleNotificationsEnabled -> {
                 viewModelScope.launch {
-                    _state.update { previousState ->
-                        updateNotificationsUseCase(isEnabled = intent.isEnabled)
-                        previousState.copy(
-                            settingsList = state.value.settingsList.map {
-                                if (it.name.key == intent.name.key) it.update(intent.isEnabled) else it
-                            }
-                        )
-                    }
+                    updateNotificationsUseCase(isEnabled = intent.isEnabled)
                 }
             }
         }

@@ -15,8 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -28,11 +26,10 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,8 +46,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.ybelik.data.mapper.toInterval
-import com.ybelik.data.mapper.toLanguage
 import com.ybelik.news.R
 import com.ybelik.news.screen.settings.SettingsIntent.ChangeInterval
 import com.ybelik.news.screen.settings.SettingsIntent.ChangeLanguage
@@ -183,10 +178,16 @@ fun SwitchSettingsCard(
     isChecked: Boolean,
     onCheckedStateChanged: (Boolean) -> Unit
 ) {
+    SideEffect {
+        Log.d(TAG, "SwitchSettingsCard: recomposition")
+    }
     Card(
         modifier = modifier
             .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -234,9 +235,7 @@ fun SelectSettingsCardPreview() {
         description = "Description",
         currentSelection = "English",
         menuList = listOf("Russian", "German", "French"),
-//        onExpandedChange = {},
         onSelectionChange = {},
-//        expanded = true
     )
 }
 
@@ -249,13 +248,14 @@ fun SelectSettingsCard(
     currentSelection: String,
     menuList: List<String>,
     onSelectionChange: (String) -> Unit
-//    expanded: Boolean,
-//    onExpandedChange: (Boolean) -> Unit
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -271,7 +271,7 @@ fun SelectSettingsCard(
             fontSize = 16.sp
         )
         Spacer(modifier = Modifier.height(16.dp))
-        DropdownMenu(
+        DropDownMenu(
             currentSelection = currentSelection,
             options = menuList,
             onSelectionChange = onSelectionChange
@@ -283,18 +283,16 @@ fun SelectSettingsCard(
 @Preview
 @Composable
 fun MenuPreview() {
-    DropdownMenu(
+    DropDownMenu(
         currentSelection = "English",
         options = listOf("Russian", "German", "French"),
-//        onExpandedChange = {},
         onSelectionChange = {},
-//        expanded = true
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownMenu(
+fun DropDownMenu(
     modifier: Modifier = Modifier,
     currentSelection: String,
     options: List<String>,
@@ -314,14 +312,14 @@ fun DropdownMenu(
             .padding(horizontal = 16.dp),
         expanded = expanded,
         onExpandedChange = {
-            Log.d(TAG, "onExpandedChange: expanded was $expanded, new value = $it")
             expanded = it
-            Log.d(TAG, "onExpandedChange: expanded set to $expanded ")
         }
 
     ) {
-        TextField(
-            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
             state = textFieldState,
             readOnly = true,
             lineLimits = TextFieldLineLimits.SingleLine,
@@ -331,16 +329,13 @@ fun DropdownMenu(
         ExposedDropdownMenu(
             modifier = Modifier.fillMaxWidth(),
             expanded = expanded,
-            onDismissRequest = { expanded = false },
-//            containerColor = MaterialTheme.colorScheme.secondary,
-//            shape = MenuDefaults.shape,
+            onDismissRequest = { expanded = false }
         ) {
-            options.forEach{  option ->
+            options.forEach { option ->
                 DropdownMenuItem(
                     modifier = Modifier.fillMaxWidth(),
                     text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
                     onClick = {
-                        textFieldState.setTextAndPlaceCursorAtEnd(option)
                         Log.d(TAG, "onMenuItemClick: option = $option")
 
                         onSelectionChange(option)
