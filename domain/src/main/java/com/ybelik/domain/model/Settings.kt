@@ -23,12 +23,12 @@ enum class Language(val queryParamName: String) {
     GERMAN("de")
 }
 
-enum class Interval(val minutes: Int, readableName: String) {
-    MIN_15(15, readableName = "15 minute"),
-    MIN_30(30, readableName = "30 minute"),
-    HOUR_1(60, readableName = "1 hour"),
-    HOUR_2(120, readableName = "2 hours"),
-    HOUR_4(240, readableName = "4 hours"),
-    HOUR_8(480, readableName = "8 hours"),
-    HOUR_24(1440, readableName = "24 hours"),
+enum class Interval(val minutes: Int) {
+    MIN_15(15),
+    MIN_30(30),
+    HOUR_1(60),
+    HOUR_2(120),
+    HOUR_4(240),
+    HOUR_8(480),
+    HOUR_24(1440),
 }

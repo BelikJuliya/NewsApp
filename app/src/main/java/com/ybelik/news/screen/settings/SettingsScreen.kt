@@ -65,14 +65,15 @@ fun SettingsScreen(
 
     val permissionsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = {}
-    )
-
-    LaunchedEffect(keys = arrayOf(Unit)) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissionsLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        onResult = {
+            viewModel.handleIntent(
+                ToggleNotificationsEnabled(
+                    name = SwitchableSettingsName.NOTIFICATIONS,
+                    isEnabled = false
+                )
+            )
         }
-    }
+    )
 
     SideEffect {
         Log.d(TAG, "SettingsScreen: recomposition")
@@ -119,21 +120,29 @@ fun SettingsScreen(
                             title = settingsItem.title,
                             description = settingsItem.description,
                             isChecked = settingsItem.isChecked,
-                            onCheckedStateChanged = {
+                            onCheckedStateChanged = { isChecked ->
                                 when (settingsItem.name) {
                                     SwitchableSettingsName.WIFI -> viewModel.handleIntent(
                                         ToggleIsWifiOnly(
                                             name = SwitchableSettingsName.WIFI,
-                                            isWifiOnly = it
+                                            isWifiOnly = isChecked
                                         )
                                     )
 
-                                    SwitchableSettingsName.NOTIFICATIONS -> viewModel.handleIntent(
-                                        ToggleNotificationsEnabled(
-                                            name = SwitchableSettingsName.NOTIFICATIONS,
-                                            isEnabled = it
-                                        )
-                                    )
+                                    SwitchableSettingsName.NOTIFICATIONS -> {
+                                        if (isChecked) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                                permissionsLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                                            }
+                                        } else {
+                                            viewModel.handleIntent(
+                                                ToggleNotificationsEnabled(
+                                                    name = SwitchableSettingsName.NOTIFICATIONS,
+                                                    isEnabled = false
+                                                )
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         )

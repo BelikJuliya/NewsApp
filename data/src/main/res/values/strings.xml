@@ -3,4 +3,15 @@
     <string name="new_articles">New articles</string>
     <string name="new_articles_title">New articles</string>
     <string name="topics_updated">Topics updated (%1$d): \n %2$s</string>
+    <string name="russian">Русский</string>
+    <string name="english">English\n</string>
+    <string name="francais">Francais</string>
+    <string name="deutsch">Deutsch</string>
+    <string name="_15_minute">15 minute</string>
+    <string name="_30_minute">30 minute</string>
+    <string name="_1_hour">1 hour</string>
+    <string name="_2_hours">2 hours</string>
+    <string name="_4_hours">4 hours</string>
+    <string name="_8_hours">8 hours</string>
+    <string name="_24_hours">24 hours</string>
 </resources>

@@ -43,6 +43,8 @@ dependencies {
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.ui)
     ksp(libs.androidx.room.compiler)
 
     implementation(project(":domain"))
