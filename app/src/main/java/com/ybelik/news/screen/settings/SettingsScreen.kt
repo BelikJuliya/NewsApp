@@ -32,7 +32,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -116,62 +115,72 @@ fun SettingsScreen(
             ) { settingsItem ->
                 when (settingsItem) {
                     is SettingsUIModel.SwitchSettings -> {
-                        SwitchSettingsCard(
+                        SettingCard(
                             title = settingsItem.title,
-                            description = settingsItem.description,
-                            isChecked = settingsItem.isChecked,
-                            onCheckedStateChanged = { isChecked ->
-                                when (settingsItem.name) {
-                                    SwitchableSettingsName.WIFI -> viewModel.handleIntent(
-                                        ToggleIsWifiOnly(
-                                            name = SwitchableSettingsName.WIFI,
-                                            isWifiOnly = isChecked
-                                        )
-                                    )
-
-                                    SwitchableSettingsName.NOTIFICATIONS -> {
-                                        if (isChecked) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                                permissionsLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                                            }
-                                        } else {
-                                            viewModel.handleIntent(
-                                                ToggleNotificationsEnabled(
-                                                    name = SwitchableSettingsName.NOTIFICATIONS,
-                                                    isEnabled = false
+                            subtitle = settingsItem.subtitle,
+                            content = {
+                                Switch(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    checked = settingsItem.isChecked,
+                                    onCheckedChange = { isChecked ->
+                                        when (settingsItem.name) {
+                                            SwitchableSettingsName.WIFI -> viewModel.handleIntent(
+                                                ToggleIsWifiOnly(
+                                                    name = SwitchableSettingsName.WIFI,
+                                                    isWifiOnly = isChecked
                                                 )
                                             )
+
+                                            SwitchableSettingsName.NOTIFICATIONS -> {
+                                                if (isChecked) {
+                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                                        permissionsLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                                                    }
+                                                } else {
+                                                    viewModel.handleIntent(
+                                                        ToggleNotificationsEnabled(
+                                                            name = SwitchableSettingsName.NOTIFICATIONS,
+                                                            isEnabled = false
+                                                        )
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
-                                }
+                                )
                             }
                         )
                     }
 
                     is SettingsUIModel.MenuSettings -> {
-                        SelectSettingsCard(
+                        SettingCard(
                             title = settingsItem.title,
-                            description = settingsItem.description,
-                            currentSelection = settingsItem.currentSelection,
-                            menuList = settingsItem.possibleSelections,
-                            onSelectionChange = {
-                                when (settingsItem.name) {
-                                    SelectableSettingsName.LANGUAGE -> viewModel.handleIntent(
-                                        ChangeLanguage(
-                                            name = SelectableSettingsName.LANGUAGE,
-                                            language = it
-                                        )
-                                    )
+                            subtitle = settingsItem.subtitle,
+                            content = {
+                                DropDownMenu(
+                                    selectedItem = settingsItem.selectedItem,
+                                    items = settingsItem.items,
+                                    onItemSelected = {
+                                        when (settingsItem.name) {
+                                            SelectableSettingsName.LANGUAGE -> viewModel.handleIntent(
+                                                ChangeLanguage(
+                                                    name = SelectableSettingsName.LANGUAGE,
+                                                    language = it
+                                                )
+                                            )
 
-                                    SelectableSettingsName.INTERVAL -> viewModel.handleIntent(
-                                        ChangeInterval(
-                                            name = SelectableSettingsName.INTERVAL,
-                                            interval = it
-                                        )
-                                    )
-                                }
-                            }
-                        )
+                                            SelectableSettingsName.INTERVAL -> viewModel.handleIntent(
+                                                ChangeInterval(
+                                                    name = SelectableSettingsName.INTERVAL,
+                                                    interval = it
+                                                )
+                                            )
+                                        }
+                                    }
+                                )
+                            },
+
+                            )
                     }
                 }
             }
@@ -180,122 +189,28 @@ fun SettingsScreen(
 }
 
 @Composable
-fun SwitchSettingsCard(
-    modifier: Modifier = Modifier,
-    title: String,
-    description: String,
-    isChecked: Boolean,
-    onCheckedStateChanged: (Boolean) -> Unit
-) {
-    SideEffect {
-        Log.d(TAG, "SwitchSettingsCard: recomposition")
-    }
-    Card(
-        modifier = modifier
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = title,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = description,
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Switch(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            checked = isChecked,
-            onCheckedChange = {
-                onCheckedStateChanged(it)
-            }
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-    }
-}
-
-@Composable
-@Preview
-fun SettingsCardPreview() {
-    SwitchSettingsCard(
-        title = "Title",
-        description = "Description",
-        isChecked = true,
-        onCheckedStateChanged = {
-
-        }
-    )
-}
-
-@Composable
 @Preview
 fun SelectSettingsCardPreview() {
-    SelectSettingsCard(
+    SettingCard(
         title = "Title",
-        description = "Description",
-        currentSelection = "English",
-        menuList = listOf("Russian", "German", "French"),
-        onSelectionChange = {},
+        subtitle = "Description",
+        content = {
+            DropDownMenu(
+                selectedItem = "English",
+                items = listOf("Russian", "German", "French"),
+                onItemSelected = {},
+            )
+        }
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SelectSettingsCard(
-    modifier: Modifier = Modifier,
-    title: String,
-    description: String,
-    currentSelection: String,
-    menuList: List<String>,
-    onSelectionChange: (String) -> Unit
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = title,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = description,
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        DropDownMenu(
-            currentSelection = currentSelection,
-            options = menuList,
-            onSelectionChange = onSelectionChange
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-    }
 }
 
 @Preview
 @Composable
 fun MenuPreview() {
     DropDownMenu(
-        currentSelection = "English",
-        options = listOf("Russian", "German", "French"),
-        onSelectionChange = {},
+        selectedItem = "English",
+        items = listOf("Russian", "German", "French"),
+        onItemSelected = {},
     )
 }
 
@@ -303,17 +218,17 @@ fun MenuPreview() {
 @Composable
 fun DropDownMenu(
     modifier: Modifier = Modifier,
-    currentSelection: String,
-    options: List<String>,
-    onSelectionChange: (String) -> Unit,
+    selectedItem: String,
+    items: List<String>,
+    onItemSelected: (String) -> Unit,
 ) {
     SideEffect {
-        Log.d(TAG, "DropdownMenu: recomposition with current selection = $currentSelection")
+        Log.d(TAG, "DropdownMenu: recomposition with current selection = $selectedItem")
     }
 
     var expanded by remember { mutableStateOf(false) }
-    val textFieldState = remember(currentSelection) {
-        TextFieldState(currentSelection)
+    val textFieldState = remember(selectedItem) {
+        TextFieldState(selectedItem)
     }
     ExposedDropdownMenuBox(
         modifier = modifier
@@ -340,14 +255,14 @@ fun DropDownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            options.forEach { option ->
+            items.forEach { option ->
                 DropdownMenuItem(
                     modifier = Modifier.fillMaxWidth(),
                     text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
                     onClick = {
                         Log.d(TAG, "onMenuItemClick: option = $option")
 
-                        onSelectionChange(option)
+                        onItemSelected(option)
                         expanded = !expanded
                     },
                     trailingIcon = {
@@ -360,6 +275,41 @@ fun DropDownMenu(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun SettingCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    subtitle: String,
+    content: @Composable () -> Unit
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = title,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = subtitle,
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        content()
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 

@@ -33,30 +33,30 @@ class SettingsViewModel @Inject constructor(
         SettingsUIModel.MenuSettings(
             name = SelectableSettingsName.LANGUAGE,
             title = "Select language",
-            description = "Select language for news search",
-            currentSelection = Settings.DEFAULT_LANGUAGE.name,
-            possibleSelections = Language.entries.map { it.name }
+            subtitle = "Select language for news search",
+            selectedItem = Settings.DEFAULT_LANGUAGE.name,
+            items = Language.entries.map { it.name }
         ),
         SettingsUIModel.MenuSettings(
             name = SelectableSettingsName.INTERVAL,
             title = "Update interval",
-            description = "How often update news",
-            currentSelection = Settings.DEFAULT_INTERVAL.name,
-            possibleSelections = Interval.entries
+            subtitle = "How often update news",
+            selectedItem = Settings.DEFAULT_INTERVAL.name,
+            items = Interval.entries
                 .map { it.name }
                 .toMutableList()
         ),
         SettingsUIModel.SwitchSettings(
             name = SwitchableSettingsName.NOTIFICATIONS,
             title = "Notifications",
-            description = "Show notifications about new articles",
+            subtitle = "Show notifications about new articles",
             isChecked = false,
 
             ),
         SettingsUIModel.SwitchSettings(
             name = SwitchableSettingsName.WIFI,
             title = "Update only via Wi-Fi",
-            description = "Save mobile data",
+            subtitle = "Save mobile data",
             isChecked = false
         )
     )

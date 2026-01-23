@@ -12,19 +12,19 @@ sealed class SettingsUIModel(open val name: SettingsKey) {
     data class MenuSettings(
         override val name: SelectableSettingsName,
         val title: String,
-        val description: String,
-        val currentSelection: String,
-        val possibleSelections: List<String>
+        val subtitle: String,
+        val selectedItem: String,
+        val items: List<String>
     ) : SettingsUIModel(name) {
 
         override fun update(value: Any): SettingsUIModel =
-            copy(currentSelection = value as String)
+            copy(selectedItem = value as String)
     }
 
     data class SwitchSettings(
         override val name: SwitchableSettingsName,
         val title: String,
-        val description: String,
+        val subtitle: String,
         val isChecked: Boolean
     ) : SettingsUIModel(name) {
 
@@ -35,13 +35,13 @@ sealed class SettingsUIModel(open val name: SettingsKey) {
     fun updateFrom(settings: Settings): SettingsUIModel =
         when (name.key) {
             SelectableSettingsName.LANGUAGE.key ->
-                if (this is MenuSettings && currentSelection != settings.language.name)
-                    copy(currentSelection = settings.language.name)
+                if (this is MenuSettings && selectedItem != settings.language.name)
+                    copy(selectedItem = settings.language.name)
                 else this
 
             SelectableSettingsName.INTERVAL.key ->
-                if (this is MenuSettings && currentSelection != settings.interval.name)
-                    copy(currentSelection = settings.interval.name)
+                if (this is MenuSettings && selectedItem != settings.interval.name)
+                    copy(selectedItem = settings.interval.name)
                 else this
 
             SwitchableSettingsName.NOTIFICATIONS.key ->
