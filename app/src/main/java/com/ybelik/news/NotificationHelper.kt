@@ -43,7 +43,7 @@ class NotificationHelperImpl @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val notification = Notification.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.breaking_news)
+            .setSmallIcon(com.ybelik.news.R.drawable.ic_breaking_news)
             .setContentTitle(context.getString(R.string.new_articles_title))
             .setContentText(
                 context.getString(

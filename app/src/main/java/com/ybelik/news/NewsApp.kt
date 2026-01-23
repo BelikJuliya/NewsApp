@@ -11,14 +11,13 @@ import javax.inject.Inject
 class NewsApp : Application(), Configuration.Provider {
 
     @Inject
-    var workerFactory: HiltWorkerFactory? = null
-
+    lateinit var workerFactory: HiltWorkerFactory
     @Inject
     lateinit var startupManager: AppStartupManager
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
-            .setWorkerFactory(workerFactory!!)
+            .setWorkerFactory(workerFactory)
             .build()
 
     override fun onCreate() {
