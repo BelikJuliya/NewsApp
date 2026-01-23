@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
@@ -304,7 +305,9 @@ fun DropdownMenu(
     }
 
     var expanded by remember { mutableStateOf(false) }
-    val textFieldState = rememberTextFieldState(currentSelection)
+    val textFieldState = remember(currentSelection) {
+        TextFieldState(currentSelection)
+    }
     ExposedDropdownMenuBox(
         modifier = modifier
             .fillMaxWidth()
