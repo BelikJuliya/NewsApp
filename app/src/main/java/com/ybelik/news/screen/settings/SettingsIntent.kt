@@ -1,29 +1,26 @@
 package com.ybelik.news.screen.settings
 
-import com.ybelik.domain.model.Interval
-import com.ybelik.domain.model.Language
-
 sealed class SettingsIntent(
-    val settingsName: SettingsName
+    val settingsName: SettingsKey
 ) {
 
     data class ChangeLanguage(
-        val name: SettingsName,
-        val language: Language
+        val name: SettingsKey,
+        val language: String
     ) : SettingsIntent(name)
 
     data class ChangeInterval(
-        val name: SettingsName,
-        val interval: Interval
+        val name: SettingsKey,
+        val interval: String
     ) : SettingsIntent(name)
 
     data class ToggleNotificationsEnabled(
-        val name: SettingsName,
+        val name: SettingsKey,
         val isEnabled: Boolean
     ) : SettingsIntent(name)
 
     data class ToggleIsWifiOnly(
-        val name: SettingsName,
+        val name: SettingsKey,
         val isWifiOnly: Boolean
     ) : SettingsIntent(name)
 }

@@ -104,4 +104,9 @@ dependencies {
 
     // Work manager
     implementation(libs.androidx.work.runtime.ktx)
+
+    // Icons
+    implementation(libs.compose.material.icons.extended)
+    implementation(libs.compose.material.icons)
+
 }

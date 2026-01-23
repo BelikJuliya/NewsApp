@@ -16,6 +16,7 @@ appcompat = "1.6.1"
 material = "1.10.0"
 jetbrainsKotlinJvm = "2.0.21"
 navigationCompose = "2.9.6"
+composeIcons = "1.6.8"
 
 ksp = "2.0.21-1.0.27"
 hilt = "2.57.2"
@@ -74,6 +75,8 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+compose-material-icons = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "composeIcons" }
+compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeIcons" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

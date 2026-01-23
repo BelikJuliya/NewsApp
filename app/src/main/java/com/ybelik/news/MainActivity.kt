@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.ybelik.news.navigation.NavGraph
 import com.ybelik.news.screen.subscriiption.SubscriptionsScreen
 import com.ybelik.news.ui.theme.NewsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,17 +28,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NewsAppTheme {
-                val permissionsLauncher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.RequestPermission(),
-                    onResult = {}
-                )
-                SubscriptionsScreen(
-                    onNavigateToSettings = {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            permissionsLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                        }
-                    }
-                )
+                NavGraph()
             }
         }
     }
