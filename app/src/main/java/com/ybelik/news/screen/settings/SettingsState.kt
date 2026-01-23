@@ -6,16 +6,20 @@ data class SettingsState(
     val settingsList: List<SettingsUIModel>
 )
 
-sealed class SettingsUIModel(open val name: SettingsKey) {
+sealed class SettingsUIModel(
+    open val name: SettingsKey,
+    open val title: String,
+    open val subtitle: String
+) {
 
     abstract fun update(value: Any): SettingsUIModel
     data class MenuSettings(
         override val name: SelectableSettingsName,
-        val title: String,
-        val subtitle: String,
+        override val title: String,
+        override val subtitle: String,
         val selectedItem: String,
         val items: List<String>
-    ) : SettingsUIModel(name) {
+    ) : SettingsUIModel(name, title, subtitle) {
 
         override fun update(value: Any): SettingsUIModel =
             copy(selectedItem = value as String)
@@ -23,10 +27,10 @@ sealed class SettingsUIModel(open val name: SettingsKey) {
 
     data class SwitchSettings(
         override val name: SwitchableSettingsName,
-        val title: String,
-        val subtitle: String,
+        override val title: String,
+        override val subtitle: String,
         val isChecked: Boolean
-    ) : SettingsUIModel(name) {
+    ) : SettingsUIModel(name, title, subtitle) {
 
         override fun update(value: Any): SettingsUIModel =
             copy(isChecked = value as Boolean)

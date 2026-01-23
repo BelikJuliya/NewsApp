@@ -113,12 +113,12 @@ fun SettingsScreen(
                 items = state.settingsList,
                 key = { it.name }
             ) { settingsItem ->
-                when (settingsItem) {
-                    is SettingsUIModel.SwitchSettings -> {
-                        SettingCard(
-                            title = settingsItem.title,
-                            subtitle = settingsItem.subtitle,
-                            content = {
+                SettingCard(
+                    title = settingsItem.title,
+                    subtitle = settingsItem.subtitle,
+                    content = {
+                        when (settingsItem) {
+                            is SettingsUIModel.SwitchSettings -> {
                                 Switch(
                                     modifier = Modifier.padding(horizontal = 16.dp),
                                     checked = settingsItem.isChecked,
@@ -149,14 +149,8 @@ fun SettingsScreen(
                                     }
                                 )
                             }
-                        )
-                    }
 
-                    is SettingsUIModel.MenuSettings -> {
-                        SettingCard(
-                            title = settingsItem.title,
-                            subtitle = settingsItem.subtitle,
-                            content = {
+                            is SettingsUIModel.MenuSettings -> {
                                 DropDownMenu(
                                     selectedItem = settingsItem.selectedItem,
                                     items = settingsItem.items,
@@ -178,11 +172,10 @@ fun SettingsScreen(
                                         }
                                     }
                                 )
-                            },
-
-                            )
+                            }
+                        }
                     }
-                }
+                )
             }
         }
     }
