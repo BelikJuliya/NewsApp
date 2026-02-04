@@ -5,8 +5,15 @@
 4. Удаление и обновление новостей
 5. Автоматическое обновление статей в бекграунде через WorkManager
 6. Отправка пушей при появлении новых новостей
-7. Возможность менять настройки обновления новостей: выбирать интервал обновления, состояние подключения к Wi-Fi и включать / отключать отправку пуш уведомлений
+7. Возможность менять настройки обновления новостей: выбирать интервал обновления, состояние подключения к Wi-Fi и включать / отключать отправку пуш уведомлений и переключать язык
 8. Возможность поделиться новостью или открыть ее через браузер.
 
 Приложение написано полностью на Jetpack Compose с использованием Navigation Component, Hilt, Room, WorkManager, MVI, Clean Architecture, а также разделено на модули по слоям.
+
+<img width="509" height="906" alt="image" src="https://github.com/user-attachments/assets/cee6d5b8-31d9-439f-96de-08f3455bfe3c" />
+<img width="506" height="901" alt="image" src="https://github.com/user-attachments/assets/65472e63-652e-435d-b458-dfc3b94309d6" />
+<img width="510" height="904" alt="image" src="https://github.com/user-attachments/assets/31672606-a041-4fec-8c63-51254cfc2886" />
+![Uploading image.png…]()
+
+
 
